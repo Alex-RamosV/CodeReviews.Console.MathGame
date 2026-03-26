@@ -45,34 +45,18 @@ do
     switch (userInput)
     {
         case "1":
-            if (CheckStatusGame())
-            {
-                break;
-            }
             SumOperation();
             break;
 
         case "2":
-            if (CheckStatusGame())
-            {
-                break;
-            }
             SubOperation();
             break;
 
         case "3":
-            if (CheckStatusGame())
-            {
-                break;
-            }
             DivOperation();
             break;
 
         case "4":
-            if (CheckStatusGame())
-            {
-                break;
-            }
             MultOperation();
             break;
 
@@ -119,33 +103,33 @@ int GetRandomNumber(int number)
 }
 
 
-bool CheckStatusGame()
+bool IsGameOver()
 {
-    if (questionsAsked == maxQuestionAsked)
+    if (questionsAsked != maxQuestionAsked)
     {
-        TimeSpan timeSpan = stopwatch.Elapsed;
-
-        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", timeSpan.Hours, timeSpan.TotalMinutes, timeSpan.Seconds, timeSpan.Milliseconds / 10);
-
-        gamesPlayed.Add($"You got {correctAnswers}/{maxQuestionAsked} correct answers! - Time: {elapsedTime}");
-
-        Console.WriteLine("\nGame over!\n");
-        Console.WriteLine($"Here are your results: {correctAnswers}/{maxQuestionAsked}");
-        Console.WriteLine($"You complete the game under: {elapsedTime}");
-        Console.WriteLine("\nPress the Enter key to play a new game.");
-
-        correctAnswers = 0;
-        questionsAsked = 0;
-
-        stopwatch.Reset();
-        isChronometer = false;
-
-        Console.ReadLine();
-
-        return true;
+        return false;
     }
 
-    return false;
+    TimeSpan timeSpan = stopwatch.Elapsed;
+
+    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", timeSpan.Hours, timeSpan.TotalMinutes, timeSpan.Seconds, timeSpan.Milliseconds / 10);
+
+    gamesPlayed.Add($"You got {correctAnswers}/{maxQuestionAsked} correct answers! - Time: {elapsedTime}");
+
+    Console.WriteLine("\nGame over!\n");
+    Console.WriteLine($"Here are your results: {correctAnswers}/{maxQuestionAsked}");
+    Console.WriteLine($"You complete the game under: {elapsedTime}");
+    Console.WriteLine("\nPress the Enter key to play a new game.");
+
+    correctAnswers = 0;
+    questionsAsked = 0;
+
+    stopwatch.Reset();
+    isChronometer = false;
+
+    Console.ReadLine();
+
+    return true;
 }
 
 
@@ -187,6 +171,9 @@ int DisplayOperation(char charOperation, int valueOne, int valueTwo)
 
 void SumOperation()
 {
+    if (IsGameOver())
+        return;
+
     numberOne = GetRandomNumber(difficulty);
     numberTwo = GetRandomNumber(difficulty);
 
@@ -200,6 +187,9 @@ void SumOperation()
 
 void SubOperation()
 {
+    if (IsGameOver())
+        return;
+
     numberOne = GetRandomNumber(difficulty);
     numberTwo = GetRandomNumber(difficulty);
 
@@ -213,6 +203,9 @@ void SubOperation()
 
 void DivOperation()
 {
+    if (IsGameOver())
+        return;
+
     numberOne = GetRandomNumber(difficulty);
     numberTwo = 2;
 
@@ -241,6 +234,9 @@ void DivOperation()
 
 void MultOperation()
 {
+    if (IsGameOver())
+        return;
+
     numberOne = GetRandomNumber(difficulty);
     numberTwo = GetRandomNumber(difficulty);
 
@@ -295,7 +291,7 @@ void PlayRandomGame()
         }
 
         Console.Clear();
-        CheckStatusGame();
+        IsGameOver();
 
     }
     else
