@@ -102,11 +102,11 @@ int GetRandomNumber(int number)
 }
 
 
-bool IsGameOver()
+void IsGameOver()
 {
     if (questionsAsked != maxQuestionAsked)
     {
-        return false;
+        return;
     }
 
     TimeSpan timeSpan = stopwatch.Elapsed;
@@ -128,7 +128,7 @@ bool IsGameOver()
 
     Console.ReadLine();
 
-    return true;
+    return;
 }
 
 
@@ -447,7 +447,7 @@ void ModifyDifficulty()
 }
 
 
-void DisplayDifficulty()
+void DisplayDifficulty() 
 {
     switch (difficulty)
     {
