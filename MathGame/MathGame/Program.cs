@@ -13,6 +13,7 @@ Stopwatch stopwatch = new();
 List<string> gamesPlayed = [];
 
 bool isChronometer = false;
+bool isRandom = false;
 int difficulty = 10;
 int userResult = 0;
 int numberOne = 0;
@@ -35,8 +36,6 @@ do
     Console.WriteLine("- 7 - Review results.");
 
     DisplayDifficulty();
-
-    CheckChronometerStatus();
 
     Console.WriteLine("Please type a number to choose an option from the menu: (exit)");
 
@@ -99,7 +98,7 @@ while (userInput != "exit");
 int GetRandomNumber(int number)
 {
     Random randomNumber = new();
-    return randomNumber.Next(number);
+    return randomNumber.Next(1, number);
 }
 
 
@@ -171,81 +170,177 @@ int DisplayOperation(char charOperation, int valueOne, int valueTwo)
 
 void SumOperation()
 {
-    if (IsGameOver())
+    if (isRandom)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
+
+        result = numberOne + numberTwo;
+
+        userResult = DisplayOperation('+', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+
         return;
+    }
 
-    numberOne = GetRandomNumber(difficulty);
-    numberTwo = GetRandomNumber(difficulty);
+    CheckChronometerStatus();
 
-    result = numberOne + numberTwo;
+    for (int i = 0; i < maxQuestionAsked; i++)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
 
-    userResult = DisplayOperation('+', numberOne, numberTwo);
+        result = numberOne + numberTwo;
 
-    CheckQuestion(userResult, result);
+        userResult = DisplayOperation('+', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+    }
+
+    Console.Clear();
+    IsGameOver();
 }
 
 
 void SubOperation()
 {
-    if (IsGameOver())
+    if (isRandom)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
+
+        result = Math.Abs(numberOne - numberTwo);
+
+        userResult = DisplayOperation('-', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+
         return;
+    }
 
-    numberOne = GetRandomNumber(difficulty);
-    numberTwo = GetRandomNumber(difficulty);
+    CheckChronometerStatus();
 
-    result = Math.Abs(numberOne - numberTwo);
+    for (int i = 0; i < maxQuestionAsked; i++)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
 
-    userResult = DisplayOperation('-', numberOne, numberTwo);
+        result = Math.Abs(numberOne - numberTwo);
 
-    CheckQuestion(userResult, result);
+        userResult = DisplayOperation('-', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+    }
+
+    Console.Clear();
+    IsGameOver();
 }
 
 
 void DivOperation()
 {
-    if (IsGameOver())
-        return;
-
-    numberOne = GetRandomNumber(difficulty);
-    numberTwo = 2;
-
-    result = numberOne % numberTwo;
-
-    if (result == 0)
+    if (isRandom)
     {
-        result = numberOne / numberTwo;
-    }
-    else
-    {
-        while (result != 0)
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
+
+        result = numberOne % numberTwo;
+
+        if (result == 0)
         {
-            numberOne = GetRandomNumber(difficulty);
+            result = numberOne / numberTwo;
+        }
+        else
+        {
+            while (result != 0)
+            {
+                numberOne = GetRandomNumber(difficulty);
+                numberTwo = GetRandomNumber(difficulty);
 
-            result = numberOne % numberTwo;
+                result = numberOne % numberTwo;
+            }
+
+            result = numberOne / numberTwo;
         }
 
-        result = numberOne / numberTwo;
+        userResult = DisplayOperation('/', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+
+        return;
     }
 
-    userResult = DisplayOperation('/', numberOne, numberTwo);
+    CheckChronometerStatus();
 
-    CheckQuestion(userResult, result);
+    for (int i = 0; i < maxQuestionAsked; i++)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
+
+        result = numberOne % numberTwo;
+
+        if (result == 0)
+        {
+            result = numberOne / numberTwo;
+        }
+        else
+        {
+            while (result != 0)
+            {
+                numberOne = GetRandomNumber(difficulty);
+                numberTwo = GetRandomNumber(difficulty);
+
+                result = numberOne % numberTwo;
+            }
+
+            result = numberOne / numberTwo;
+        }
+
+        userResult = DisplayOperation('/', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+    }
+
+    Console.Clear();
+    IsGameOver();
 }
+
 
 void MultOperation()
 {
-    if (IsGameOver())
+    if (isRandom)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
+
+        result = numberOne * numberTwo;
+
+        userResult = DisplayOperation('x', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+
         return;
+    }
 
-    numberOne = GetRandomNumber(difficulty);
-    numberTwo = GetRandomNumber(difficulty);
+    CheckChronometerStatus();
 
-    result = numberOne * numberTwo;
+    for (int i = 0; i < maxQuestionAsked; i++)
+    {
+        numberOne = GetRandomNumber(difficulty);
+        numberTwo = GetRandomNumber(difficulty);
 
-    userResult = DisplayOperation('x', numberOne, numberTwo);
+        result = numberOne * numberTwo;
 
-    CheckQuestion(userResult, result);
+        userResult = DisplayOperation('x', numberOne, numberTwo);
+
+        CheckQuestion(userResult, result);
+    }
+
+    Console.Clear();
+    IsGameOver();
 }
+
 
 void PlayRandomGame()
 {
@@ -258,8 +353,7 @@ void PlayRandomGame()
 
     if (userInput.Equals("y"))
     {
-        correctAnswers = 0;
-        questionsAsked = 0;
+        isRandom = true;
 
         CheckChronometerStatus();
 
@@ -291,8 +385,10 @@ void PlayRandomGame()
         }
 
         Console.Clear();
-        IsGameOver();
 
+        isRandom = false;
+
+        IsGameOver();
     }
     else
     {
@@ -350,6 +446,7 @@ void ModifyDifficulty()
     while (userInput != "back");
 }
 
+
 void DisplayDifficulty()
 {
     switch (difficulty)
@@ -367,6 +464,7 @@ void DisplayDifficulty()
             break;
     }
 }
+
 
 void CheckChronometerStatus()
 {
