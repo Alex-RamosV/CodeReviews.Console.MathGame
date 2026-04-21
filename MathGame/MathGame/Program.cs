@@ -359,23 +359,23 @@ void PlayRandomGame()
 
         for (int i = 0; i < maxQuestionAsked; i++)
         {
-            int index = GetRandomNumber(4);
+            int index = GetRandomNumber(5);
 
             switch (index)
             {
-                case 0:
+                case 1:
                     SumOperation();
                     break;
 
-                case 1:
+                case 2:
                     SubOperation();
                     break;
 
-                case 2:
+                case 3:
                     DivOperation();
                     break;
 
-                case 3:
+                case 4:
                     MultOperation();
                     break;
 
